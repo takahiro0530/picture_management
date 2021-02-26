@@ -1,2 +1,2 @@
-# picture_management
+# picture_management_server
 写真管理用レポジトリ
