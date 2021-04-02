@@ -9,7 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 /* 	"github.com/labstack/echo" */
-	pb "github.com/takahiro0530/picture_management_server/protocol/protocol/picture_management_proto"
+/* 	pb "github.com/takahiro0530/picture_management_server/protocol/protocol/picture_management_proto" */
+    pb "protocol/protocol/picture_management_proto"
 )
 
 type server struct{}
