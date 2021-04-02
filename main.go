@@ -1,15 +1,25 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+/* 	"github.com/labstack/echo" */
+	pb "github.com/takahiro0530/picture_management_server/protocol/protocol/picture_management_proto"
 )
 
-func main() {
+type server struct{}
+
+type Picture struct {
+    PictureName string
+}
+
+
+func (s *server) ListPictures(ctx context.Context, req *pb.PicturesRequest) (*pb.PicturesResponce, error)) {
 	// sessionの作成
 	// Must関数を使うことでエラーハンドリングもやってくれている
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
@@ -33,9 +43,42 @@ func main() {
 		log.Fatal(err)
 	}
 
+	pictureList := make([]*Picture, 0)
+
 	for _, item := range result.Contents {
-		fmt.Println("Name", *item.Key)
+		if item != nil {
+			picture := &Picture {
+                PictureName: *item.Key
+			}
+			pictureList = append(pictureList, picture)
+			fmt.Println("Name", *item.Key)
+		}
 	}
+
+	res := pb.PicturesResponce{
+		Picture: pictureList
+	}
+	
+	return &res, nil 
+
+}
+
+func main() {
+/* 
+	e := echo.New()
+
+	e.Logger.Fatal(e.Start(":8080"))
+ */
+	listenPort, err := net.Listen("tcp", ":50001")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	s := grpc.NewServer()
+
+	pb.RegisterPictureManagemetServer(s, &server{})
+
+	s.Serve(listenPort)
 
 	/* 	// ファイルを開く
 	   	filePath := "./test.txt"
