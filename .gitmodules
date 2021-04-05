@@ -1,0 +1,3 @@
+[submodule "protocol/picture_management_proto"]
+	path = protocol/picture_management_proto
+	url = https://github.com/takahiro0530/picture_management_proto.git
